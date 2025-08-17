@@ -1,0 +1,392 @@
+{% extends 'announcements/app_base.html' %}
+{% load static %}
+
+{% block title %}Create Room - ClassroomHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.create-room-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    font-size: 2rem;
+    background: linear-gradient(135deg, #4a956b, #5ba872);
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-brand h2 {
+    margin: 0;
+    color: #1a202c;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.welcome-text {
+    color: #2d3748;
+    font-weight: 500;
+}
+
+.welcome-text strong {
+    color: #4a956b;
+}
+
+.main-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #4a956b, #5ba872);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.page-header p {
+    font-size: 1.1rem;
+    color: #4a5568;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4a956b, #5ba872, #667eea);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-icon {
+    font-size: 3rem;
+    background: linear-gradient(135deg, #4a956b, #5ba872);
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    box-shadow: 0 8px 20px rgba(74, 149, 107, 0.3);
+}
+
+.form-header h2 {
+    font-size: 1.8rem;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.form-header p {
+    color: #4a5568;
+    font-size: 1rem;
+}
+
+.error-messages {
+    margin-bottom: 1.5rem;
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #dc2626;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.room-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.95rem;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    z-index: 1;
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+.form-input,
+input[type="text"] {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem !important;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-input:focus,
+input[type="text"]:focus {
+    outline: none;
+    border-color: #4a956b;
+    box-shadow: 0 0 0 3px rgba(74, 149, 107, 0.1);
+    transform: translateY(-1px);
+}
+
+.help-text {
+    font-size: 0.85rem;
+    color: #718096;
+    margin-top: 0.25rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.create-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 1.1rem;
+    padding: 1.2rem 2rem;
+    font-weight: 600;
+}
+
+.cancel-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 1.1rem;
+    padding: 1.2rem 2rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.room-code-generator {
+    margin-top: 0.5rem;
+}
+
+.generate-code-btn {
+    background: transparent;
+    color: #4a956b;
+    border: 2px solid #4a956b;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.generate-code-btn:hover {
+    background: #4a956b;
+    color: white;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .nav-menu {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .main-content {
+        padding: 0 1rem;
+    }
+    
+    .form-container {
+        padding: 2rem 1.5rem;
+    }
+    
+    .page-header h1 {
+        font-size: 2rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2.5rem;
+    }
+    
+    .form-header h2 {
+        font-size: 1.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="create-room-container">
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo">📢</div>
+            <h2>ClassroomHub</h2>
+        </div>
+        <div class="nav-menu">
+            {% if user.is_authenticated %}
+                <span class="welcome-text">Welcome, <strong>{{ user.username }}</strong>!</span>
+                <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+                <a href="{% url 'logout' %}" class="btn btn-ghost">Logout</a>
+            {% else %}
+                <a href="{% url 'sign_in' %}" class="btn btn-primary">Sign In</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Create New Room</h1>
+            <p>Set up a new classroom room where students can join and receive announcements</p>
+        </div>
+
+        <div class="form-container">
+            <div class="form-header">
+                <div class="form-icon">🏫</div>
+                <h2>Room Details</h2>
+                <p>Fill in the information below to create your classroom room</p>
+            </div>
+
+            {% if form.errors %}
+            <div class="error-messages">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <div class="error-message">{{ error }}</div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form class="room-form" method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="room_name">Room Name</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">📚</span>
+                        {{ form.room_name }}
+                    </div>
+                    {% if form.room_name.help_text %}
+                        <div class="help-text">{{ form.room_name.help_text }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="room_code">Room Code</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔑</span>
+                        {{ form.room_code }}
+                    </div>
+                    {% if form.room_code.help_text %}
+                        <div class="help-text">{{ form.room_code.help_text }}</div>
+                    {% endif %}
+                    <div class="room-code-generator">
+                        <button type="button" class="generate-code-btn" onclick="generateRoomCode()">
+                            🎲 Generate Random Code
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large create-btn">
+                        Create Room
+                        <span class="btn-icon">→</span>
+                    </button>
+                    <a href="{% url 'home' %}" class="btn btn-ghost btn-large cancel-btn">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script>
+function generateRoomCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < 6; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    document.getElementById('room_code').value = result;
+}
+</script>
+{% endblock %}

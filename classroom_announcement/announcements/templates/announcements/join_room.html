@@ -1,0 +1,434 @@
+<!--
+    Join Room Template for Classroom Announcement Application
+    
+    This template provides an interface for users to join existing rooms using
+    a 6-character room code. Features include:
+    - Room code input form with validation
+    - Visual feedback for form interactions
+    - Error handling and user guidance
+    - Responsive design with glassmorphism styling
+    
+    Form Features:
+    - 6-character alphanumeric code requirement
+    - Automatic uppercase conversion
+    - Real-time validation feedback
+    - Clear error messaging
+    
+    Validation Rules:
+    - Room code must exist in the database
+    - User cannot join their own room
+    - User cannot join a room they're already a member of
+    - Code must be exactly 6 characters
+    
+    Context Variables:
+    - form: JoinRoomForm instance with validation
+    - Any form errors are displayed automatically
+-->
+
+{% extends 'announcements/app_base.html' %}
+{% load static %}
+
+{% block title %}Join Room - ClassroomHub{% endblock %}
+
+{% block extra_css %}
+<style>
+.join-room-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.nav-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(103, 126, 234, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    color: #667eea;
+    font-weight: 500;
+}
+
+.btn-logout {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-logout:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(238, 90, 36, 0.4);
+}
+
+.main-content {
+    padding: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100vh - 80px);
+}
+
+.btn-back {
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+    border: 2px solid #667eea;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    align-self: flex-start;
+}
+
+.btn-back:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(103, 126, 234, 0.3);
+}
+
+.join-room-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 25px;
+    padding: 3rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.join-room-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.card-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.card-subtitle {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.form-group {
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 1.25rem;
+    border: 2px solid rgba(103, 126, 234, 0.2);
+    border-radius: 15px;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    text-align: center;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(103, 126, 234, 0.1);
+    transform: scale(1.02);
+}
+
+.form-input::placeholder {
+    color: #bdc3c7;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.form-help {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    text-align: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 1.25rem 3rem;
+    border-radius: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(103, 126, 234, 0.4);
+}
+
+.error-message {
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    color: #e74c3c;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.success-message {
+    background: rgba(39, 174, 96, 0.1);
+    border: 1px solid rgba(39, 174, 96, 0.3);
+    color: #27ae60;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.info-message {
+    background: rgba(103, 126, 234, 0.1);
+    border: 1px solid rgba(103, 126, 234, 0.3);
+    color: #667eea;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+.feature-list {
+    text-align: left;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(103, 126, 234, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(103, 126, 234, 0.1);
+}
+
+.feature-list h4 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.feature-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list li {
+    padding: 0.5rem 0;
+    color: #34495e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature-list li::before {
+    content: '✅';
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .join-room-card {
+        padding: 2rem;
+    }
+    
+    .card-title {
+        font-size: 1.5rem;
+    }
+    
+    .card-subtitle {
+        font-size: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="join-room-container">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo">CH</div>
+            <div class="nav-title">ClassroomHub</div>
+        </div>
+        <div class="nav-actions">
+            <div class="user-info">
+                👤 {{ user.username }}
+            </div>
+            <a href="{% url 'logout' %}" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Back Button -->
+        <a href="{% url 'home' %}" class="btn-back">
+            ← Back to Home
+        </a>
+
+        <!-- Join Room Card -->
+        <div class="join-room-card">
+            <span class="card-icon">🚪</span>
+            <h1 class="card-title">Join a Classroom</h1>
+            <p class="card-subtitle">
+                Enter the 6-character room code provided by your teacher to join their classroom and access announcements.
+            </p>
+
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="{% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% else %}info-message{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Form Errors -->
+            {% if form.non_field_errors %}
+                <div class="error-message">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <!-- Join Room Form -->
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="{{ form.room_code.id_for_label }}" class="form-label">
+                        🔑 Room Code
+                    </label>
+                    {{ form.room_code }}
+                    {% if form.room_code.help_text %}
+                        <div class="form-help">{{ form.room_code.help_text }}</div>
+                    {% endif %}
+                    {% if form.room_code.errors %}
+                        <div class="error-message">
+                            {{ form.room_code.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    🚀 Join Classroom
+                </button>
+            </form>
+
+            <!-- Features Info -->
+            <div class="feature-list">
+                <h4>🎯 What you can do as a member:</h4>
+                <ul>
+                    <li>Read all classroom announcements</li>
+                    <li>React to announcements with emojis</li>
+                    <li>Stay updated with class activities</li>
+                    <li>Leave the room anytime</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}ClassroomHub{% endblock %}</title>
+        {% load static %}
+        
+        <!-- Global CSS for styling only (no layout) -->
+        <link rel="stylesheet" href="{% static 'announcements/app_global.css' %}" />
+        
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        
+        <!-- Page-specific CSS -->
+        {% block extra_css %}{% endblock %}
+        
+        <!-- Page-specific meta tags -->
+        {% block extra_meta %}{% endblock %}
+    </head>
+    <body>
+        <!-- Full content area - no layout restrictions -->
+        {% block content %}
+        {% endblock %}
+        
+        <!-- Page-specific JavaScript -->
+        {% block extra_js %}{% endblock %}
+    </body>
+</html>

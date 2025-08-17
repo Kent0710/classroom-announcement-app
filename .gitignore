@@ -1,0 +1,52 @@
+# Django specific
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Environment variables
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python specific
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+
+# Django migrations (optional - you might want to include these)
+# */migrations/*
+
+# Static files collected for production
+staticfiles/
+static_root/
+
+# Secret keys and sensitive configuration
+*.key
+*.pem

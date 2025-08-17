@@ -1,0 +1,241 @@
+{% extends 'announcements/base.html' %}
+
+{% block title %}Sign Up - ClassroomHub{% endblock %}
+
+{% block content %}
+<main class="auth-section">
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="auth-logo">📢</div>
+            <h1>Join ClassroomHub</h1>
+            <p>Create your account to start receiving classroom announcements</p>
+        </div>
+        
+        {% if form.errors %}
+        <div class="error-messages">
+            {% for field, errors in form.errors.items %}
+                {% for error in errors %}
+                    <div class="error-message">{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form class="auth-form" method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">👤</span>
+                    {{ form.username }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    {{ form.password1 }}
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-large auth-btn">
+                Create Account
+                <span class="btn-icon">→</span>
+            </button>
+        </form>
+        
+        <div class="auth-footer">
+            <p> Already have an account? 
+                <a href="{% url 'sign_in' %}" class="auth-link">Sign in instead</a>    
+            </p>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.auth-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.auth-container {
+    max-width: 420px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 24px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4a956b, #5ba872, #667eea);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.auth-logo {
+    font-size: 3rem;
+    background: linear-gradient(135deg, #4a956b, #5ba872);
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 8px 20px rgba(74, 149, 107, 0.3);
+}
+
+.auth-header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+    color: #4a5568;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.error-messages {
+    margin-bottom: 1.5rem;
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #dc2626;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.95rem;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    z-index: 1;
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+.form-input,
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem !important;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.form-input:focus,
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #4a956b;
+    box-shadow: 0 0 0 3px rgba(74, 149, 107, 0.1);
+    transform: translateY(-1px);
+}
+
+.auth-btn {
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: center;
+    font-size: 1.1rem;
+    padding: 1.2rem 2rem;
+    font-weight: 600;
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.auth-footer p {
+    color: #4a5568;
+    font-size: 0.95rem;
+}
+
+.auth-link {
+    color: #4a956b;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+    color: #2d7a4b;
+    text-decoration: underline;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .auth-container {
+        margin: 1rem;
+        padding: 2rem 1.5rem;
+    }
+    
+    .auth-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .auth-logo {
+        width: 60px;
+        height: 60px;
+        font-size: 2.5rem;
+    }
+}
+</style>
+{% endblock %}

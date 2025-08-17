@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}Classroom Announcement App{% endblock %}</title>
+        {% load static %}
+        
+        <!-- Global CSS -->
+        <link rel="stylesheet" href="{% static 'announcements/global.css' %}" />
+        
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        
+        <!-- Page-specific CSS -->
+        {% block extra_css %}{% endblock %}
+        
+        <!-- Page-specific meta tags -->
+        {% block extra_meta %}{% endblock %}
+    </head>
+    <body class="grid-background">
+        <div class="page-wrapper">
+            <!-- Header (can be overridden in child templates) -->
+            {% block header %}
+            <header class="header">
+                <div class="logo-section">
+                    <div class="logo-icon">📢</div>
+                    <div class="brand-info">
+                        <h2 class="app-name">ClassroomHub</h2>
+                        <small class="brand-subtitle">By CHLS Software Innovations</small>
+                    </div>
+                </div>
+                <div class="auth-buttons">
+                    {% block auth_buttons %}
+                    <button class="btn btn-primary">Sign In</button>
+                    {% endblock %}
+                </div>
+            </header>
+            {% endblock %}
+            
+            <!-- Main content area -->
+            {% block content %}
+            {% endblock %}
+            
+            <!-- Footer (can be overridden in child templates) -->
+            {% block footer %}
+            <footer class="site-footer">
+                <div class="footer-inner">
+                    <div class="footer-brand">
+                        <div class="logo-icon">📢</div>
+                        <div>
+                            <div class="footer-title">ClassroomHub</div>
+                            <div class="footer-sub">By CHLS Software Innovations</div>
+                        </div>
+                    </div>
+                    <nav class="footer-nav">
+                        <a href="#">Features</a>
+                        <a href="#">Pricing</a>
+                        <a href="#">Docs</a>
+                        <a href="#">Contact</a>
+                    </nav>
+                </div>
+                <div class="footer-bottom">
+                    <span>© 2025 CHLS Software Innovations. All rights reserved.</span>
+                    <span class="footer-legal">Privacy · Terms</span>
+                </div>
+            </footer>
+            {% endblock %}
+        </div>
+        
+        <!-- Page-specific JavaScript -->
+        {% block extra_js %}{% endblock %}
+    </body>
+</html>

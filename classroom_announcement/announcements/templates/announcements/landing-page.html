@@ -1,0 +1,45 @@
+{% extends 'announcements/base.html' %} {% load static %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'announcements/home.css' %}" />
+{% endblock %} {% block content %}
+<main class="hero-section">
+    <div class="hero-content">
+        <div class="badge">✨ New: Real-time notifications available</div>
+        <h1 class="hero-title">
+            Your classroom announcements,
+            <span class="gradient-text">perfectly organized</span>
+        </h1>
+        <p class="hero-description">
+            Streamline communication with your class officers. Get instant
+            updates, never miss important announcements, and stay connected with
+            your academic community.
+        </p>
+        <div class="cta-buttons">
+            <a class="btn btn-primary btn-large" href="{% url 'sign_up' %}">
+                Get started
+                <span class="btn-icon">→</span>
+            </a>
+            <button class="btn btn-ghost">
+                <span class="play-icon">▶</span>
+                Watch Demo
+            </button>
+        </div>
+    </div>
+
+    <div class="hero-visual">
+        <div class="illustration-container">
+            <div class="floating-card card-1">
+                <div class="notification-dot"></div>
+                <span>📅 Assignment due tomorrow</span>
+            </div>
+            <div class="floating-card card-2">
+                <div class="notification-dot"></div>
+                <span>🎉 Class party this Friday!</span>
+            </div>
+            <div class="floating-card card-3">
+                <div class="notification-dot"></div>
+                <span>📚 New study materials uploaded</span>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
